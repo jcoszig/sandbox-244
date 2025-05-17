@@ -4,6 +4,9 @@
         <sequence>
             <module name="Magento_Backend" />
             <module name="Magento_Ui" />
+            <module name="Magento_Catalog" />
+            <module name="Magento_InventoryApi" />
+            <module name="Magento_InventoryAdminUi" />
         </sequence>
     </module>
 </config>

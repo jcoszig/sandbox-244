@@ -2,27 +2,36 @@
 declare(strict_types=1);
 namespace Jcoszig\StockNotifications\Controller\Adminhtml\Index;
 
-use Magento\Catalog\Controller\Adminhtml\Product as ProductAction;
+use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Catalog\Controller\Adminhtml\Product\Builder;
 
-class Index extends ProductAction implements HttpGetActionInterface
+class Index extends Action implements HttpGetActionInterface
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Jcoszig_StockNotifications::view';
+
     /**
      * @var PageFactory
      */
     private $pageFactory;
 
+    /**
+     * @param Context $context
+     * @param PageFactory $pageFactory
+     */
     public function __construct(
         Context $context,
-        Builder $productBuilder,
-        PageFactory $rawFactory
+        PageFactory $pageFactory
     ) {
-        parent::__construct($context, $productBuilder);
-        $this->pageFactory = $rawFactory;
+        parent::__construct($context);
+        $this->pageFactory = $pageFactory;
     }
 
     /**
@@ -33,8 +42,8 @@ class Index extends ProductAction implements HttpGetActionInterface
     public function execute(): Page
     {
         $resultPage = $this->pageFactory->create();
-        $resultPage->setActiveMenu('Magento_Catalog::catalog_products');
-        $resultPage->getConfig()->getTitle()->prepend(__('Low Stock'));
+        $resultPage->setActiveMenu('Jcoszig_StockNotifications::home');
+        $resultPage->getConfig()->getTitle()->prepend(__('Stock Notifications'));
 
         return $resultPage;
     }

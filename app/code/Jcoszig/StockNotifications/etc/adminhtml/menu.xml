@@ -6,7 +6,7 @@
              module="Jcoszig_StockNotifications"
              sortOrder="1000"
              parent="Magento_Catalog::inventory"
-             resource="Magento_Catalog::products"
+             resource="Jcoszig_StockNotifications::view"
              action="stock_notifications/index/index" />
     </menu>
 </config>

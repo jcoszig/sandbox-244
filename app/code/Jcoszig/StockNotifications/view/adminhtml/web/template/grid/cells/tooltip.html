@@ -1,0 +1,14 @@
+<!-- 
+    Tooltip template for displaying source quantities and websites
+    Displays the main content with a tooltip on hover
+-->
+<div class="data-grid-cell-content">
+    <div class="tooltip-trigger" data-bind="html: $col.getLabel($row())">
+        <!-- Content will be inserted here -->
+    </div>
+    <!-- ko if: $col.getTooltip($row()) -->
+    <div class="tooltip">
+        <span class="tooltip-content" data-bind="html: $col.getTooltip($row())"></span>
+    </div>
+    <!-- /ko -->
+</div>

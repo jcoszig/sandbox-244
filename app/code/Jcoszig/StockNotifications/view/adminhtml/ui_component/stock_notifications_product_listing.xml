@@ -64,28 +64,45 @@
             </argument>
         </selectionsColumn>
         <column name="entity_id">
-          <argument name="data" xsi:type="array">
-             <item name="config" xsi:type="array">
-                <item name="filter" xsi:type="string">textRange</item>
-                <item name="label" xsi:type="string" translate="true">ID</item>
-                <item name="resizeDefaultWidth" xsi:type="string">25</item>
-             </item>
-          </argument>
-        </column>
-        <column name="sku">
-            <settings>
-                <filter>text</filter>
-                <bodyTmpl>ui/grid/cells/text</bodyTmpl>
-                <label translate="true">SKU</label>
-            </settings>
-        </column>
-        <column name="name">
-            <settings>
-                <filter>text</filter>
-                <bodyTmpl>ui/grid/cells/text</bodyTmpl>
-                <label translate="true">Name</label>
-            </settings>
-        </column>
+           <argument name="data" xsi:type="array">
+              <item name="config" xsi:type="array">
+                 <item name="filter" xsi:type="string">textRange</item>
+                 <item name="label" xsi:type="string" translate="true">ID</item>
+                 <item name="resizeDefaultWidth" xsi:type="string">25</item>
+                 <item name="sorting" xsi:type="string">asc</item>
+              </item>
+           </argument>
+         </column>
+         <column name="sku">
+             <settings>
+                 <filter>text</filter>
+                 <bodyTmpl>ui/grid/cells/text</bodyTmpl>
+                 <label translate="true">SKU</label>
+                 <sorting>asc</sorting>
+             </settings>
+         </column>
+         <column name="name">
+             <settings>
+                 <filter>text</filter>
+                 <bodyTmpl>ui/grid/cells/text</bodyTmpl>
+                 <label translate="true">Name</label>
+                 <sorting>asc</sorting>
+             </settings>
+         </column>
+         <column name="quantity_per_source" class="Jcoszig\StockNotifications\Ui\Component\Products\Listing\Column\QuantityPerSource">
+             <settings>
+                 <label translate="true">Quantity per Source</label>
+                 <bodyTmpl>Jcoszig_StockNotifications/grid/cells/tooltip</bodyTmpl>
+                 <sortable>false</sortable>
+             </settings>
+         </column>
+         <column name="websites" class="Jcoszig\StockNotifications\Ui\Component\Products\Listing\Column\Websites">
+             <settings>
+                 <label translate="true">Websites</label>
+                 <bodyTmpl>Jcoszig_StockNotifications/grid/cells/tooltip</bodyTmpl>
+                 <sortable>false</sortable>
+             </settings>
+         </column>
 <!--        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date" component="Magento_Ui/js/grid/columns/date">-->
 <!--            <settings>-->
 <!--                <filter>dateRange</filter>-->
