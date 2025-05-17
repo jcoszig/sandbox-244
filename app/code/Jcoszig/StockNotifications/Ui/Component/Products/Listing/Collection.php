@@ -3,10 +3,11 @@ declare(strict_types=1);
 namespace Jcoszig\StockNotifications\Ui\Component\Products\Listing;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult;
 use Magento\Catalog\Model\Product\Type;
 
-class Collection extends SearchResult
+class Collection extends SearchResult implements SearchResultInterface
 {
     /**
      * Set initial sort by entity ID and apply filters and joins
@@ -51,5 +52,63 @@ class Collection extends SearchResult
         
         // Group by product ID to avoid duplicates
         $this->getSelect()->group('main_table.entity_id');
+    }
+    
+    /**
+     * Get search criteria.
+     *
+     * @return \Magento\Framework\Api\SearchCriteriaInterface|null
+     */
+    public function getSearchCriteria()
+    {
+        return null;
+    }
+
+    /**
+     * Set search criteria.
+     *
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return $this
+     */
+    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    {
+        return $this;
+    }
+
+    /**
+     * Get total count.
+     *
+     * @return int
+     */
+    public function getTotalCount()
+    {
+        return $this->getSize();
+    }
+
+    /**
+     * Set total count.
+     *
+     * @param int $totalCount
+     * @return $this
+     */
+    public function setTotalCount($totalCount)
+    {
+        return $this;
+    }
+
+    /**
+     * Set items list.
+     *
+     * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
+     * @return $this
+     */
+    public function setItems(array $items = null)
+    {
+        if ($items) {
+            foreach ($items as $item) {
+                $this->addItem($item);
+            }
+        }
+        return $this;
     }
 }

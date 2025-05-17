@@ -5,6 +5,7 @@ namespace Jcoszig\StockNotifications\Ui\DataProvider\Products;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider;
 use Magento\InventoryApi\Api\GetSourceItemsBySkuInterface;
@@ -73,31 +74,28 @@ class ListingDataProvider extends DataProvider
     }
 
     /**
-     * Get data
-     *
-     * @return array
+     * @inheritdoc
      */
-    public function getData()
+    protected function searchResultToOutput(SearchResultInterface $searchResult)
     {
-        $data = parent::getData();
-        
-        if (!isset($data['items'])) {
-            return $data;
-        }
-        
-        $items = $data['items'];
-        
-        foreach ($items as &$item) {
+        $arrItems = [];
+
+        $arrItems['items'] = [];
+        foreach ($searchResult->getItems() as $item) {
+            $itemData = $item->getData();
+            
             // Add quantity per source information
-            if (isset($item['sku'])) {
-                $item['quantity_per_source'] = $this->getQuantityPerSource($item['sku']);
-                $item['websites'] = $this->getWebsites($item['entity_id']);
+            if (isset($itemData['sku'])) {
+                $itemData['quantity_per_source'] = $this->getQuantityPerSource($itemData['sku']);
+                $itemData['websites'] = $this->getWebsites((int)$itemData['entity_id']);
             }
+            
+            $arrItems['items'][] = $itemData;
         }
-        
-        $data['items'] = $items;
-        
-        return $data;
+
+        $arrItems['totalRecords'] = $searchResult->getTotalCount();
+
+        return $arrItems;
     }
     
     /**
