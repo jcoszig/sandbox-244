@@ -34,4 +34,5 @@
 !/package.json
 !/package-lock.json
 !/dev/tools/grunt/configs/local-themes.js
-!/.env
+!/.user.ini
+!/.htaccess
