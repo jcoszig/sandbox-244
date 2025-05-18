@@ -5,16 +5,14 @@
             <item name="provider" xsi:type="string">stock_notifications_product_listing.stock_notifications_product_listing_data_source</item>
             <item name="deps" xsi:type="string">stock_notifications_product_listing.stock_notifications_product_listing_data_source</item>
         </item>
-<!--        <item name="spinner" xsi:type="string">stock_notifications_product_columns</item>-->
-<!--        <item name="buttons" xsi:type="array">-->
-<!--            <item name="add" xsi:type="array">-->
-<!--                <item name="name" xsi:type="string">add</item>-->
-<!--                <item name="label" xsi:type="string">View Category Tree</item>-->
-<!--                <item name="class" xsi:type="string">primary</item>-->
-<!--                <item name="url" xsi:type="string">catalog/category/index</item>-->
-<!--            </item>-->
-<!--        </item>-->
+        <item name="spinner" xsi:type="string">stock_notifications_product_columns</item>
     </argument>
+    <settings>
+        <spinner>stock_notifications_product_columns</spinner>
+        <deps>
+            <dep>stock_notifications_product_listing.stock_notifications_product_listing_data_source</dep>
+        </deps>
+    </settings>
     <dataSource name="stock_notifications_product_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Jcoszig\StockNotifications\Ui\DataProvider\Products\ListingDataProvider</argument>
@@ -53,7 +51,41 @@
                 </item>
             </argument>
         </filters>
-        <paging name="listing_paging" />
+        <paging name="listing_paging">
+<!--            <argument name="data" xsi:type="array">-->
+<!--                <item name="config" xsi:type="array">-->
+<!--                    <item name="storageConfig" xsi:type="array">-->
+<!--                        <item name="provider" xsi:type="string">stock_notifications_product_listing.stock_notifications_product_listing.listing_top.bookmarks</item>-->
+<!--                        <item name="namespace" xsi:type="string">current.paging</item>-->
+<!--                    </item>-->
+<!--                    <item name="selectProvider" xsi:type="string">stock_notifications_product_listing.stock_notifications_product_listing.stock_notifications_product_columns.ids</item>-->
+<!--                    <item name="displayArea" xsi:type="string">bottom</item>-->
+<!--                    <item name="options" xsi:type="array">-->
+<!--                        <item name="20" xsi:type="array">-->
+<!--                            <item name="value" xsi:type="number">20</item>-->
+<!--                            <item name="label" xsi:type="string" translate="true">20</item>-->
+<!--                        </item>-->
+<!--                        <item name="30" xsi:type="array">-->
+<!--                            <item name="value" xsi:type="number">30</item>-->
+<!--                            <item name="label" xsi:type="string" translate="true">30</item>-->
+<!--                        </item>-->
+<!--                        <item name="50" xsi:type="array">-->
+<!--                            <item name="value" xsi:type="number">50</item>-->
+<!--                            <item name="label" xsi:type="string" translate="true">50</item>-->
+<!--                        </item>-->
+<!--                        <item name="100" xsi:type="array">-->
+<!--                            <item name="value" xsi:type="number">100</item>-->
+<!--                            <item name="label" xsi:type="string" translate="true">100</item>-->
+<!--                        </item>-->
+<!--                        <item name="200" xsi:type="array">-->
+<!--                            <item name="value" xsi:type="number">200</item>-->
+<!--                            <item name="label" xsi:type="string" translate="true">200</item>-->
+<!--                        </item>-->
+<!--                    </item>-->
+<!--                    <item name="pageSize" xsi:type="number">20</item>-->
+<!--                </item>-->
+<!--            </argument>-->
+        </paging>
     </listingToolbar>
     <columns name="stock_notifications_product_columns">
         <selectionsColumn name="ids">

@@ -3,6 +3,7 @@
     <type name="Jcoszig\StockNotifications\Ui\DataProvider\Products\ListingDataProvider">
         <plugin name="stock_notifications_attributes" type="Jcoszig\StockNotifications\Plugin\AddAttributesToUiDataProvider" />
         <arguments>
+            <argument name="collectionFactory" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\CollectionFactory</argument>
             <argument name="addFieldStrategies" xsi:type="array">
                 <item name="quantity_per_source" xsi:type="object">Magento\Ui\Component\Listing\Column\DefaultColumn</item>
                 <item name="websites" xsi:type="object">Magento\Ui\Component\Listing\Column\DefaultColumn</item>

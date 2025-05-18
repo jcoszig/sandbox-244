@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Jcoszig\StockNotifications\Ui\DataProvider\Products;
 
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\ReportingInterface;
 use Magento\Framework\Api\Search\SearchCriteriaBuilder;
@@ -30,6 +31,11 @@ class ListingDataProvider extends DataProvider
     private $storeManager;
 
     /**
+     * @var CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -40,6 +46,7 @@ class ListingDataProvider extends DataProvider
      * @param GetSourceItemsBySkuInterface $getSourceItemsBySku
      * @param GetSalableQuantityDataBySku $getSalableQuantityDataBySku
      * @param StoreManagerInterface $storeManager
+     * @param CollectionFactory $collectionFactory
      * @param array $meta
      * @param array $data
      */
@@ -54,6 +61,7 @@ class ListingDataProvider extends DataProvider
         GetSourceItemsBySkuInterface $getSourceItemsBySku,
         GetSalableQuantityDataBySku $getSalableQuantityDataBySku,
         StoreManagerInterface $storeManager,
+        CollectionFactory $collectionFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -71,10 +79,84 @@ class ListingDataProvider extends DataProvider
         $this->getSourceItemsBySku = $getSourceItemsBySku;
         $this->getSalableQuantityDataBySku = $getSalableQuantityDataBySku;
         $this->storeManager = $storeManager;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
-     * @inheritdoc
+     * Get data
+     *
+     * @return array
+     */
+    public function getData()
+    {
+        try {
+            $searchResult = $this->getSearchResult();
+            if ($searchResult instanceof SearchResultInterface) {
+                return $this->searchResultToOutput($searchResult);
+            }
+        } catch (\Exception $e) {
+            // Fallback to direct collection if search result fails
+        }
+        
+        // Fallback method using direct collection
+        return $this->getDataFromCollection();
+    }
+    
+    /**
+     * Get data directly from collection as fallback
+     *
+     * @return array
+     */
+    private function getDataFromCollection()
+    {
+        $collection = $this->collectionFactory->create();
+        $collection->addAttributeToSelect('*');
+        $collection->addAttributeToFilter('status', 1); // Enabled only
+        $collection->addAttributeToFilter('type_id', 'simple'); // Simple products only
+        
+        // Apply pagination
+        $pageSize = $this->request->getParam('paging')['pageSize'] ?? 20;
+        $currentPage = $this->request->getParam('paging')['current'] ?? 1;
+        
+        $collection->setPageSize($pageSize);
+        $collection->setCurPage($currentPage);
+        
+        // Apply sorting
+        $sorting = $this->request->getParam('sorting');
+        if (isset($sorting['field']) && isset($sorting['direction'])) {
+            $collection->setOrder($sorting['field'], $sorting['direction']);
+        } else {
+            // Default sorting
+            $collection->setOrder('entity_id', 'ASC');
+        }
+        
+        // Get total count before loading for performance
+        $totalCount = $collection->getSize();
+        
+        // Load the collection
+        $collection->load();
+        
+        $items = [];
+        foreach ($collection as $product) {
+            $productData = $product->getData();
+            if (isset($productData['sku'])) {
+                $productData['quantity_per_source'] = $this->getQuantityPerSource($productData['sku']);
+                $productData['websites'] = $this->getWebsites((int)$productData['entity_id']);
+            }
+            $items[] = $productData;
+        }
+        
+        return [
+            'items' => $items,
+            'totalRecords' => $totalCount
+        ];
+    }
+
+    /**
+     * Process search results
+     *
+     * @param SearchResultInterface $searchResult
+     * @return array
      */
     protected function searchResultToOutput(SearchResultInterface $searchResult)
     {
